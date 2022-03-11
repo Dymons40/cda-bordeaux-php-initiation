@@ -70,74 +70,60 @@
 //
 //echo $adults . (preg_match('/,/',  $adults) ? ' ont ' : ' a ') . " plus de 18 ans <br>";
 //echo "La somme d'age des enfant est $sommeAgeEnfant";
-//
-//
-//$cars = [
-//    "peugeot" => [
-//        ["make" => "5008", "year" => 2015, "doors" => 5],
-//        ["make" => "3008", "year" => 2009, "doors" => 5],
-//        ["make" => "108", "year" => 2015, "doors" => 3],
-//        ["make" => "208", "year" => 2015, "doors" => 2],
-//        ["make" => "5008", "year" => 2020, "doors" => 5],
-//    ],
-//    "renault" => [
-//        ["make" => "Mégane", "year" => 2015, "doors" => 5],
-//        ["make" => "Scénic", "year" => 2009, "doors" => 5],
-//        ["make" => "Clio", "year" => 2015, "doors" => 3],
-//    ]
-//];
-//
-///**
-// * @todo Je veux une chainne de caratères séparé par des | des peugeot qui ont 5 portes
-// *
-// * @todo Je veux les Renault d'avant 2010
-// *
-// * @todo Je veux rajouter une peugeot 2008 de 2022 avec 5 portes
-// *
-// * @todo Je veux supprimer les peugeot d'avant 2010
-// */
-//
-//$peugeot5Doors = [];
-//$renaultBefore2010 = [];
-//foreach ($cars as $brand => $makes) {
-//    if ($brand === 'peugeot') {
-//        foreach ($makes as $car) {
-//            if ($car['doors'] === 5) {
-////                $peugeot5Doors[] = $car['make'];
-//            }
-//        }
-//    }
-//
-//    if ($brand === 'renault') {
-//        foreach ($makes as $car) {
-//            if ($car['year'] < 2010) {
-//                $renaultBefore2010[] = $car;
-//            }
-//        }
-//    }
-//}
-//
-//$car = ["make" => "2008", "year" => 2022, "doors" => 5];
-//
-//$cars['peugeot'][] = $car;
-//
-//$peugeotMakes5Doors = implode(' | ', $peugeot5Doors);
-//var_dump($peugeotMakes5Doors);
-////var_dump($renaultBefore2010);
-////var_dump($cars);
-//
-//
-//foreach ($cars['peugeot'] as $key => $car) {
-//    if($car["year"] < 2010) {
-//        unset($cars['peugeot'][$key]);
-//    }
-//}
-////var_dump($cars);
 
+$cars = [
+    "peugeot" => [
+        ["make" => "5008", "year" => 2015, "doors" => 5],
+        ["make" => "3008", "year" => 2009, "doors" => 5],
+        ["make" => "108", "year" => 2015, "doors" => 3],
+        ["make" => "208", "year" => 2015, "doors" => 2],
+        ["make" => "5008", "year" => 2020, "doors" => 5],
+    ],
+    "renault" => [
+        ["make" => "Mégane", "year" => 2015, "doors" => 5],
+        ["make" => "Scénic", "year" => 2009, "doors" => 5],
+        ["make" => "Clio", "year" => 2015, "doors" => 3],
+    ]
+];
 
+$peugeot5portes = "";
+$renaultBefore2010 = "";
+$objPeugeot = ["make" => "2008", "year" => "2022", "doors" => 5];
 
+foreach ($cars as $carKey => $carValues) {
+    if($carKey === 'peugeot') {
+        foreach ($carValues as $carPeugeotKey => $carPeugeotValues) {
+            if ($carPeugeotValues['doors'] === 5) {
+                $peugeot5portes .= $carPeugeotValues['make'] . ' | ';
+            }
+            if ($carPeugeotValues['year'] < 2010) {
+                unset($cars[$carKey][$carPeugeotKey]);
+            }
+        }
 
+        array_push($cars[$carKey], $objPeugeot);
+    }
+    if($carKey === 'renault') {
+        //echo 'Coucou renault';
+        foreach ($carValues as $carRenault) {
+            if ($carRenault['year'] < 2010) {
+                $renaultBefore2010 .= $carRenault['make'] . ', ';
+            }
+        }
+    }
+}
 
+$peugeot5portes = trim($peugeot5portes, '| ');
+$renaultBefore2010 = trim($renaultBefore2010, ', ');
+?>
 
-
+<pre>
+    <?php echo $peugeot5portes . (preg_match('/|/', $peugeot5portes) ? ' ont ' : ' a ') . " 5 portes \n"; ?>
+    <pre/>
+    <pre>
+        <?php echo $renaultBefore2010 . (preg_match('/,/', $renaultBefore2010) ? ' dates ' : ' date ') . " d'avant 2010 \n"; ?>
+        <pre/>
+        <pre>
+            <?php var_dump($cars); ?>
+            <pre/>
 
